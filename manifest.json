@@ -7,7 +7,9 @@
     "hooks": {
         "mapsexporter": {
             "apparmor": "mapsexporter.apparmor",
-            "desktop":  "mapsexporter.desktop"
+            "desktop":  "mapsexporter.desktop",
+            "urls": "mapsexporter.url-dispatcher",
+            "content-hub": "mapsexporter.contenthub"
         }
     },
     "version": "0.1.2",

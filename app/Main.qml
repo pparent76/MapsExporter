@@ -4,10 +4,21 @@ import QtWebEngine 1.9
 
 ApplicationWindow {
     visible: true
-    width: 800
-    height: 600
+    id: app
     title: "Google Maps Navigator"
 
+    Component.onCompleted: {
+        // Vérifie s'il y a au moins un argument
+        if (Qt.application.arguments.length > 0) {
+            var firstArg = Qt.application.arguments[1];
+            
+            // Charge l'URL si c'est un lien
+            if (firstArg.startsWith("http://") || firstArg.startsWith("https://")) {
+                mapView.url = firstArg;
+            }
+        }
+    }
+    
     Column {
         anchors.fill: parent
         spacing: 0
@@ -44,7 +55,9 @@ ApplicationWindow {
             var t = mapView.title
             var parts = t.split("–")
             console.log(t);
-            overlayText.text = "Taking you to\n"+ (parts.length ? parts[0].trim() : t.trim())
+            var str=parts.length ? parts[0].trim() : t.trim();
+            var str2=str.replace(",", ",\n")
+            overlayText.text = "Taking you to\n"+ str2;
             mapView.reload();
             overlayPanel.visible=true;
             delayedTimer.start();
