@@ -124,8 +124,14 @@ MainView {
             // Récupère l'URL réelle de la WebView
             mapView.runJavaScript("window.location.href;", function(result) {
                 var urlStr = result;
-                var latMatch = urlStr.match(/!3d([-0-9.]+)/);
-                var lonMatch = urlStr.match(/!4d([-0-9.]+)/);
+                var n=5;
+                while ( ! (latMatch && lonMatch) )
+                {
+                n=n+1;
+                var urlres=urlStr.slice(-n);
+                var latMatch = urlres.match(/!3d([-0-9.]+)/);
+                var lonMatch = urlres.match(/!4d([-0-9.]+)/);
+                }
                 if (latMatch && lonMatch) {
                     var geoUri = "geo:" + latMatch[1] + "," + lonMatch[1];
                     console.log("Geo URI: " + geoUri);
