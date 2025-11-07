@@ -125,7 +125,7 @@ MainView {
             mapView.runJavaScript("window.location.href;", function(result) {
                 var urlStr = result;
                 var n=5;
-                while ( ! (latMatch && lonMatch) )
+                while ( ! (latMatch && lonMatch) && n < urlStr.length )
                 {
                 n=n+1;
                 var urlres=urlStr.slice(-n);
