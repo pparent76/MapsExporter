@@ -1,11 +1,13 @@
+import Ubuntu.Content 1.3
+import Ubuntu.Components 1.3
 import QtQuick 2.9
 import QtQuick.Controls 2.9
 import QtWebEngine 1.9
 
-ApplicationWindow {
+MainView {
     visible: true
     id: app
-    title: "Google Maps Navigator"
+    applicationName: "mapsexporter.pparent"
 
     Component.onCompleted: {
         // Vérifie s'il y a au moins un argument
@@ -28,7 +30,7 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: navigateButton.top
             width: parent.width
-            height: parent.height - 50
+            height: parent.height - units.gu(11)
             url: "https://www.google.com/maps"
             
           profile:  WebEngineProfile {
@@ -42,6 +44,26 @@ ApplicationWindow {
         onFeaturePermissionRequested: function(securityOrigin, feature) {
             grantFeaturePermission(securityOrigin, feature, false); 
         }
+        onUrlChanged: {
+            if ( url.toString().indexOf("/place/") !== -1)
+                {
+                navigate.enabled=true   
+                }
+            else
+                {
+                var urlStr = url.toString();
+                var latMatch = urlStr.match(/!3d([-0-9.]+)/);
+                var lonMatch = urlStr.match(/!4d([-0-9.]+)/);
+                if (latMatch && lonMatch) {
+                    navigate.enabled=true  
+                }
+                else
+                {
+                    navigate.enabled=false   
+                }
+            }
+        }
+        
         }
 
         Button {
@@ -49,7 +71,9 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            height:100
+            enabled:false
+            id:navigate
+            height:units.gu(11)
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
             var t = mapView.title
@@ -68,20 +92,21 @@ ApplicationWindow {
         contentItem: Row {
           anchors.centerIn: parent
           anchors.verticalCenter: parent.verticalCenter 
-          spacing: 8
+          spacing: units.gu(1)
 
           Text {
               text: "Navigate with Ubuntu Touch! "
               color: "black"
               font.pixelSize: 16
               font.bold: true
+              font.family: "Roboto"
               anchors.verticalCenter: parent.verticalCenter 
           }
 
           Image {
               source: "img/Ubports-robot.png"
-              width: 50
-              height: 50
+              width: units.gu(6)
+              height: units.gu(6)
               fillMode: Image.PreserveAspectFit
               anchors.verticalCenter: parent.verticalCenter
           }
@@ -156,8 +181,8 @@ Rectangle {
         BusyIndicator {
             id: loadingIndicator
             running: true
-            width: 60
-            height: 60
+            width: units.gu(6)
+            height: units.gu(6)
             anchors.horizontalCenter: parent.horizontalCenter
         }
 

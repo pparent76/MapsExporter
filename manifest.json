@@ -12,7 +12,7 @@
             "content-hub": "mapsexporter.contenthub"
         }
     },
-    "version": "0.1.2",
+    "version": "0.1.3",
     "maintainer": "Pierre Parent <pro@pierre-parent.fr>",
     "framework" : "ubuntu-sdk-20.04"
 }
