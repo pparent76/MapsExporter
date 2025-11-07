@@ -125,12 +125,19 @@ MainView {
             mapView.runJavaScript("window.location.href;", function(result) {
                 var urlStr = result;
                 var n=5;
+                var latMatch;
+                var lonMatch;
                 while ( ! (latMatch && lonMatch) && n < urlStr.length )
                 {
-                n=n+1;
+                n=n+3;
                 var urlres=urlStr.slice(-n);
-                var latMatch = urlres.match(/!3d([-0-9.]+)/);
-                var lonMatch = urlres.match(/!4d([-0-9.]+)/);
+                latMatch = urlres.match(/!3d([-0-9.]+)/);
+                if (latMatch)
+                    lonMatch = urlres.match(/!4d([-0-9.]+)/);
+                }
+                if ( !(latMatch && lonMatch) ) {
+                    latMatch = urlStr.match(/!3d([-0-9.]+)/);
+                    lonMatch = urlStr.match(/!4d([-0-9.]+)/);
                 }
                 if (latMatch && lonMatch) {
                     var geoUri = "geo:" + latMatch[1] + "," + lonMatch[1];
