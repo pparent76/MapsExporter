@@ -82,7 +82,6 @@ MainView {
             var str=parts.length ? parts[0].trim() : t.trim();
             var str2=str.replace(",", ",\n")
             overlayText.text = "Taking you to\n"+ str2;
-            mapView.reload();
             overlayPanel.visible=true;
             delayedTimer.start();
             }
@@ -122,19 +121,20 @@ MainView {
         repeat: true
         onTriggered: {
             // Récupère l'URL réelle de la WebView
-            mapView.runJavaScript("window.location.href;", function(result) {
-                var urlStr = result;
+                var urlStr = mapView.url.toString();
                 var n=5;
                 var latMatch;
                 var lonMatch;
-                while ( ! (latMatch && lonMatch) && n < urlStr.length )
+                //Search for long lat, starting by the end of the url
+                while ( ! (latMatch && lonMatch) && n + 6 < urlStr.length )
                 {
-                n=n+3;
-                var urlres=urlStr.slice(-n);
-                latMatch = urlres.match(/!3d([-0-9.]+)/);
-                if (latMatch)
-                    lonMatch = urlres.match(/!4d([-0-9.]+)/);
+                n=n+6;
+                    var urlres=urlStr.slice(-n);
+                    latMatch = urlres.match(/!3d([-0-9.]+)/);
+                    if (latMatch)
+                        lonMatch = urlres.match(/!4d([-0-9.]+)/);
                 }
+                
                 if ( !(latMatch && lonMatch) ) {
                     latMatch = urlStr.match(/!3d([-0-9.]+)/);
                     lonMatch = urlStr.match(/!4d([-0-9.]+)/);
@@ -149,7 +149,6 @@ MainView {
                 } else {
                     console.log("Coordonnées introuvables dans l'URL: "+urlStr);
                 }
-            });
         }
             }
             
